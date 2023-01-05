@@ -1,7 +1,7 @@
 import { Piece } from "./piece.js";
 class Knight extends Piece {
     constructor(constants, resources, sctx, position, color) {
-        super(constants, resources, sctx, position, color);
+        super(constants, resources, sctx, position, color, true);
     }
     draw() {
         let image;

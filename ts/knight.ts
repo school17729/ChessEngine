@@ -9,7 +9,7 @@ import { Piece } from "./piece.js";
 class Knight extends Piece {
 
     constructor(constants: Constants, resources: Resources, sctx: StandardContext, position: Position, color: string) {
-        super(constants, resources, sctx, position, color);
+        super(constants, resources, sctx, position, color, true);
     }
 
     draw(): void {
