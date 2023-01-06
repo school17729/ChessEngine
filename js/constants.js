@@ -14,7 +14,12 @@ class Constants {
         this.blackQueenPath = "./res/blackQueen.png";
         this.blackKingPath = "./res/blackKing.png";
         this.dotPath = "./res/dot.png";
-        this.tileSize = 1000 / 8;
+        this.boardMatrixSize = 8;
+        this.boardMatrixWidth = 8;
+        this.boardMatrixHeight = 8;
+        this.tileSize = 1000 / this.boardMatrixSize;
+        this.tileWidth = 1000 / this.boardMatrixWidth;
+        this.tileHeight = 1000 / this.boardMatrixHeight;
     }
     init() {
     }

@@ -1,35 +1,38 @@
 import { Position } from "./position.js";
 import { Piece } from "./piece.js";
+import { PieceColor } from "./pieceColor.js";
 class Rook extends Piece {
-    constructor(constants, resources, sctx, position, color) {
-        super(constants, resources, sctx, position, color, true);
+    constructor(globalInstances, board, position, color) {
+        super(globalInstances, board, position, color, true);
     }
     draw() {
         let image;
-        if (this.color == "white") {
+        if (this.color === PieceColor.WHITE) {
             image = this.resources.getImage(this.constants.whiteRookPath);
         }
-        else {
+        else if (this.color === PieceColor.BLACK) {
             image = this.resources.getImage(this.constants.blackRookPath);
         }
-        this.sctx.drawImage(image, this.canvasPosition.x, this.canvasPosition.y, this.constants.tileSize, this.constants.tileSize);
+        else {
+            image = this.resources.getImage("");
+        }
+        this.sctx.drawImage(image, this.canvasPosition.x, this.canvasPosition.y, this.constants.tileWidth, this.constants.tileHeight);
     }
-    isMoveLegal(board, move) {
-        return !this.isAttackingAllies(board, move) &&
-            !this.isGoingThroughPieces(board, move) &&
-            this.isOnBoard(move);
-    }
-    getLegalMoves(board) {
+    getLegalMoves() {
         let moves = [];
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < this.constants.boardMatrixSize; i++) {
             let move = new Position(this.matrixPosition.x, i);
-            if (this.isMoveLegal(board, move)) {
+            if (!this.attackingOwnColor(move) &&
+                !this.goingThroughPieces(move) &&
+                this.isOnBoard(move)) {
                 moves.push(move);
             }
         }
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < this.constants.boardMatrixSize; i++) {
             let move = new Position(i, this.matrixPosition.y);
-            if (this.isMoveLegal(board, move)) {
+            if (!this.attackingOwnColor(move) &&
+                !this.goingThroughPieces(move) &&
+                this.isOnBoard(move)) {
                 moves.push(move);
             }
         }

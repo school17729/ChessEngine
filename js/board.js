@@ -1,23 +1,26 @@
 import { Position } from "./position.js";
-import { Piece } from "./piece.js";
+import { PieceColor } from "./pieceColor.js";
 import { Pawn } from "./pawn.js";
 import { Knight } from "./knight.js";
 import { Bishop } from "./bishop.js";
 import { Rook } from "./rook.js";
 import { Queen } from "./queen.js";
 import { King } from "./king.js";
+import { InvalidPiece } from "./invalidPiece.js";
 class Board {
-    constructor(globals, constants, resources, sctx) {
-        this.globals = globals;
-        this.resources = resources;
-        this.sctx = sctx;
-        this.constants = constants;
+    constructor(globalInstances) {
+        this.globals = globalInstances.globals;
+        this.console = this.globals.console;
+        this.resources = globalInstances.resources;
+        this.sctx = globalInstances.sctx;
+        this.globalInstances = globalInstances;
+        this.constants = globalInstances.constants;
         this.whitePieces = [];
         this.blackPieces = [];
     }
     init() {
-        const playerColor = "white";
-        if (playerColor === "white") {
+        const playerColor = PieceColor.WHITE;
+        if (playerColor === PieceColor.WHITE) {
             this.setupAsWhite();
         }
     }
@@ -30,28 +33,34 @@ class Board {
         }
     }
     setupAsWhite() {
-        this.whitePieces.push(new Rook(this.constants, this.resources, this.sctx, new Position(0, 7), "white"));
-        this.whitePieces.push(new Knight(this.constants, this.resources, this.sctx, new Position(1, 7), "white"));
-        this.whitePieces.push(new Bishop(this.constants, this.resources, this.sctx, new Position(2, 7), "white"));
-        this.whitePieces.push(new Queen(this.constants, this.resources, this.sctx, new Position(3, 7), "white"));
-        this.whitePieces.push(new King(this.constants, this.resources, this.sctx, new Position(4, 7), "white"));
-        this.whitePieces.push(new Bishop(this.constants, this.resources, this.sctx, new Position(5, 7), "white"));
-        this.whitePieces.push(new Knight(this.constants, this.resources, this.sctx, new Position(6, 7), "white"));
-        this.whitePieces.push(new Rook(this.constants, this.resources, this.sctx, new Position(7, 7), "white"));
-        for (let i = 0; i < 8; i++) {
-            this.whitePieces.push(new Pawn(this.constants, this.resources, this.sctx, new Position(i, 5), "white"));
+        this.whitePieces.push(new Rook(this.globalInstances, this, new Position(0, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Knight(this.globalInstances, this, new Position(1, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Bishop(this.globalInstances, this, new Position(2, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Queen(this.globalInstances, this, new Position(3, 7), PieceColor.WHITE));
+        this.whitePieces.push(new King(this.globalInstances, this, new Position(4, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Bishop(this.globalInstances, this, new Position(5, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Knight(this.globalInstances, this, new Position(6, 7), PieceColor.WHITE));
+        this.whitePieces.push(new Rook(this.globalInstances, this, new Position(7, 7), PieceColor.WHITE));
+        for (let i = 0; i < this.constants.boardMatrixSize; i++) {
+            this.whitePieces.push(new Pawn(this.globalInstances, this, new Position(i, 5), PieceColor.WHITE));
         }
-        this.blackPieces.push(new Rook(this.constants, this.resources, this.sctx, new Position(0, 0), "black"));
-        this.blackPieces.push(new Knight(this.constants, this.resources, this.sctx, new Position(1, 0), "black"));
-        this.blackPieces.push(new Bishop(this.constants, this.resources, this.sctx, new Position(2, 0), "black"));
-        this.blackPieces.push(new Queen(this.constants, this.resources, this.sctx, new Position(3, 0), "black"));
-        this.blackPieces.push(new King(this.constants, this.resources, this.sctx, new Position(4, 0), "black"));
-        this.blackPieces.push(new Bishop(this.constants, this.resources, this.sctx, new Position(5, 0), "black"));
-        this.blackPieces.push(new Knight(this.constants, this.resources, this.sctx, new Position(6, 0), "black"));
-        this.blackPieces.push(new Rook(this.constants, this.resources, this.sctx, new Position(7, 0), "black"));
-        for (let i = 0; i < 8; i++) {
-            this.blackPieces.push(new Pawn(this.constants, this.resources, this.sctx, new Position(i, 1), "black"));
+        this.blackPieces.push(new Rook(this.globalInstances, this, new Position(0, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Knight(this.globalInstances, this, new Position(1, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Bishop(this.globalInstances, this, new Position(2, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Queen(this.globalInstances, this, new Position(3, 0), PieceColor.BLACK));
+        this.blackPieces.push(new King(this.globalInstances, this, new Position(4, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Bishop(this.globalInstances, this, new Position(5, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Knight(this.globalInstances, this, new Position(6, 0), PieceColor.BLACK));
+        this.blackPieces.push(new Rook(this.globalInstances, this, new Position(7, 0), PieceColor.BLACK));
+        for (let i = 0; i < this.constants.boardMatrixSize; i++) {
+            this.blackPieces.push(new Pawn(this.globalInstances, this, new Position(i, 1), PieceColor.BLACK));
         }
+        // this.console.log(this.getPieceAtTilePosition(new Position(0, 7)).getLegalMoves(this));
+        // this.console.log(this.getPieceAtTilePosition(new Position(1, 7)).getLegalMoves(this));
+        // this.console.log(this.getPieceAtTilePosition(new Position(2, 7)).getLegalMoves(this));
+        // this.console.log(this.getPieceAtTilePosition(new Position(3, 7)).getLegalMoves(this));
+        // this.console.log(this.getPieceAtTilePosition(new Position(4, 7)).getLegalMoves(this));
+        // this.console.log(this.getPieceAtTilePosition(new Position(0, 5)).getLegalMoves(this));
     }
     getPieceAtTilePosition(position) {
         for (let i = 0; i < this.whitePieces.length; i++) {
@@ -64,7 +73,7 @@ class Board {
                 return this.blackPieces[i];
             }
         }
-        return new Piece(this.constants, this.resources, this.sctx, new Position(0, 0), "white", false);
+        return new InvalidPiece(this.globalInstances, this);
     }
 }
 export { Board };

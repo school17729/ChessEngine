@@ -14,7 +14,13 @@ class Constants {
     blackKingPath: string = "./res/blackKing.png";
     dotPath: string = "./res/dot.png";
 
-    tileSize: number = 1000/8;
+    boardMatrixSize: number = 8;
+    boardMatrixWidth: number = 8;
+    boardMatrixHeight: number = 8;
+
+    tileSize: number = 1000 / this.boardMatrixSize;
+    tileWidth: number = 1000 / this.boardMatrixWidth;
+    tileHeight: number = 1000 / this.boardMatrixHeight;
 
     constructor() {
 

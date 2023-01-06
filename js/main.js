@@ -5,18 +5,22 @@ import { Keyboard } from "./keyboard.js";
 import { Mouse } from "./mouse.js";
 import { Resources } from "./resources.js";
 import { Constants } from "./constants.js";
+import { State } from "./state.js";
+import { GlobalInstances } from "./globalInstances.js";
 import { Board } from "./board.js";
-import { Position } from "./position.js";
 class Main {
     constructor() {
         this.globals = new Globals();
+        this.console = this.globals.console;
         this.elements = new Elements(this.globals);
         this.sctx = new StandardContext(this.globals, this.elements.canvas);
         this.keyboard = new Keyboard(this.globals);
         this.mouse = new Mouse(this.globals, this.elements.canvas);
         this.resources = new Resources(this.globals);
         this.constants = new Constants();
-        this.board = new Board(this.globals, this.constants, this.resources, this.sctx);
+        this.state = new State();
+        this.globalInstances = new GlobalInstances(this.globals, this.elements, this.sctx, this.keyboard, this.mouse, this.resources, this.constants, this.state);
+        this.board = new Board(this.globalInstances);
     }
     init() {
         this.globals.init();
@@ -28,10 +32,6 @@ class Main {
         this.resources.init();
         this.constants.init();
         this.board.init();
-        this.globals.console.log(this.board.getPieceAtTilePosition(new Position(0, 7)).getLegalMoves(this.board));
-        this.globals.console.log(this.board.getPieceAtTilePosition(new Position(2, 7)).getLegalMoves(this.board));
-        this.globals.console.log(this.board.getPieceAtTilePosition(new Position(3, 7)).getLegalMoves(this.board));
-        this.globals.console.log(this.board.getPieceAtTilePosition(new Position(4, 7)).getLegalMoves(this.board));
         this.resources.addImage(this.constants.chessBoardPath);
         this.resources.addImage(this.constants.whitePawnPath);
         this.resources.addImage(this.constants.whiteKnightPath);
@@ -60,7 +60,7 @@ class Main {
         this.sctx.clear();
         const dot = this.resources.getImage(this.constants.dotPath);
         this.board.draw();
-        this.sctx.drawImage(dot, this.constants.tileSize * 0, this.constants.tileSize * 2, this.constants.tileSize, this.constants.tileSize);
+        this.sctx.drawImage(dot, this.constants.tileWidth * 0, this.constants.tileHeight * 2, this.constants.tileWidth, this.constants.tileHeight);
         this.globals.window.requestAnimationFrame(this.loop.bind(this));
     }
 }
