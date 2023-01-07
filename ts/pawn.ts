@@ -79,6 +79,7 @@ class Pawn extends Piece {
             }
             if (
                 !this.attackingOwnColor(movePosition) &&
+                !this.attackingOppositeColor(movePosition) &&
                 !this.goingThroughPieces(movePosition) &&
                 this.isOnBoard(movePosition)
             ) {

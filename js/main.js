@@ -9,6 +9,7 @@ import { State } from "./state.js";
 import { GlobalInstances } from "./globalInstances.js";
 import { Position } from "./position.js";
 import { Board } from "./board.js";
+import { PieceColor } from "./pieceColor.js";
 class Main {
     constructor() {
         this.globals = new Globals();
@@ -69,7 +70,7 @@ class Main {
         if (this.mouse.leftButtonDown) {
             const mouseMatrixPositionX = Math.floor((this.mouse.mouseX / 1000) * 8);
             const mouseMatrixPositionY = Math.floor((this.mouse.mouseY / 1000) * 8);
-            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY));
+            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY), PieceColor.WHITE);
         }
     }
 }

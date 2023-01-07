@@ -12,6 +12,7 @@ import { GlobalInstances } from "./globalInstances.js";
 
 import { Position } from "./position.js";
 import { Board } from "./board.js";
+import { PieceColor } from "./pieceColor.js";
 
 
 class Main {
@@ -30,6 +31,7 @@ class Main {
     globalInstances: GlobalInstances;
 
     board: Board;
+    playerColor: PieceColor;
     
 
     constructor() {
@@ -46,8 +48,8 @@ class Main {
 
         this.globalInstances = new GlobalInstances(this.globals, this.elements, this.sctx, this.keyboard, this.mouse, this.resources, this.constants, this.state);
 
-        
         this.board = new Board(this.globalInstances);
+        this.playerColor = PieceColor.WHITE;
     }
     
     init(): void {
@@ -104,7 +106,7 @@ class Main {
         if (this.mouse.leftButtonDown) {
             const mouseMatrixPositionX: number = Math.floor((this.mouse.mouseX / 1000) * 8);
             const mouseMatrixPositionY: number = Math.floor((this.mouse.mouseY / 1000) * 8);
-            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY));
+            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY), PieceColor.WHITE);
         }
     }
 

@@ -40,6 +40,11 @@ class King extends Piece {
                 }
             }
         }
+
+        if (this.moveCount === 0) {
+            
+        }
+
         return moves;
     }
 
