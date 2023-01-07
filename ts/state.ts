@@ -1,6 +1,8 @@
-class State {
-    constructor() {
+import { Position } from "./position.js";
 
+class State {
+
+    constructor() {
     }
     init(): void {
 

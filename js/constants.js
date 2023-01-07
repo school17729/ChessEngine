@@ -14,12 +14,15 @@ class Constants {
         this.blackQueenPath = "./res/blackQueen.png";
         this.blackKingPath = "./res/blackKing.png";
         this.dotPath = "./res/dot.png";
+        this.selectedPath = "./res/selected.png";
         this.boardMatrixSize = 8;
         this.boardMatrixWidth = 8;
         this.boardMatrixHeight = 8;
         this.tileSize = 1000 / this.boardMatrixSize;
         this.tileWidth = 1000 / this.boardMatrixWidth;
         this.tileHeight = 1000 / this.boardMatrixHeight;
+        this.smoothPieceMovement = true;
+        this.pieceMoveDuration = 10; // in frames, typically there are 60 frames in a second
     }
     init() {
     }

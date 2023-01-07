@@ -1,10 +1,13 @@
 import { Position } from "./position.js";
+import { Move } from "./move.js";
+import { MoveType } from "./moveType.js";
 import { Piece } from "./piece.js";
+import { PieceType } from "./pieceType.js";
 import { PieceColor } from "./pieceColor.js";
 class Pawn extends Piece {
     constructor(globalInstances, board, position, color) {
-        super(globalInstances, board, position, color, true);
-        this.movedForwardTwoTiles = false;
+        super(globalInstances, board, position, PieceType.PAWN, color, true);
+        this.doublePushed = false;
     }
     draw() {
         let image;
@@ -21,52 +24,62 @@ class Pawn extends Piece {
     }
     getLegalMoves() {
         let moves = [];
-        let move;
+        let movePosition;
         for (let i = -1; i < 2; i += 2) {
-            let move;
+            let movePosition;
             if (this.color === PieceColor.WHITE) {
-                move = new Position(this.matrixPosition.x + i, this.matrixPosition.y - 1);
+                movePosition = new Position(this.matrixPosition.x + i, this.matrixPosition.y - 1);
             }
             else if (this.color === PieceColor.BLACK) {
-                move = new Position(this.matrixPosition.x + i, this.matrixPosition.y + 1);
+                movePosition = new Position(this.matrixPosition.x + i, this.matrixPosition.y + 1);
             }
             else {
-                move = new Position(0, 0);
+                movePosition = new Position(0, 0);
             }
-            if (this.attackingOppositeColor(move) &&
-                this.isOnBoard(move)) {
-                moves.push(move);
+            if (this.attackingOppositeColor(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.MOVE, movePosition));
             }
         }
         if (this.color === PieceColor.WHITE) {
-            move = new Position(this.matrixPosition.x, this.matrixPosition.y - 1);
+            movePosition = new Position(this.matrixPosition.x, this.matrixPosition.y - 1);
         }
         else if (this.color === PieceColor.BLACK) {
-            move = new Position(this.matrixPosition.x, this.matrixPosition.y + 1);
+            movePosition = new Position(this.matrixPosition.x, this.matrixPosition.y + 1);
         }
         else {
-            move = new Position(0, 0);
+            movePosition = new Position(0, 0);
         }
-        if (!this.attackingOwnColor(move) &&
-            this.isOnBoard(move)) {
-            moves.push(move);
+        if (!this.attackingOwnColor(movePosition) &&
+            !this.attackingOppositeColor(movePosition) &&
+            this.isOnBoard(movePosition)) {
+            moves.push(new Move(MoveType.MOVE, movePosition));
         }
-        if (this.moveCount === 0) {
-            if (this.color === PieceColor.WHITE) {
-                move = new Position(this.matrixPosition.x, this.matrixPosition.y - 2);
+        if (!this.doublePushed) {
+            if (this.moveCount === 0) {
+                if (this.color === PieceColor.WHITE) {
+                    movePosition = new Position(this.matrixPosition.x, this.matrixPosition.y - 2);
+                }
+                else if (this.color === PieceColor.BLACK) {
+                    movePosition = new Position(this.matrixPosition.x, this.matrixPosition.y + 2);
+                }
+                else {
+                    movePosition = new Position(0, 0);
+                }
             }
-            else if (this.color === PieceColor.BLACK) {
-                move = new Position(this.matrixPosition.x, this.matrixPosition.y + 2);
+            if (!this.attackingOwnColor(movePosition) &&
+                !this.goingThroughPieces(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.DOUBLE_PUSH, movePosition));
             }
-            else {
-                move = new Position(0, 0);
-            }
-        }
-        if (!this.attackingOwnColor(move) &&
-            this.isOnBoard(move)) {
-            moves.push(move);
         }
         return moves;
+    }
+    move(move) {
+        this.moveBase(move);
+        if (move.type === MoveType.DOUBLE_PUSH) {
+            this.doublePushed = true;
+        }
     }
 }
 export { Pawn };

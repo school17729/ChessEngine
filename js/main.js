@@ -7,6 +7,7 @@ import { Resources } from "./resources.js";
 import { Constants } from "./constants.js";
 import { State } from "./state.js";
 import { GlobalInstances } from "./globalInstances.js";
+import { Position } from "./position.js";
 import { Board } from "./board.js";
 class Main {
     constructor() {
@@ -46,6 +47,7 @@ class Main {
         this.resources.addImage(this.constants.blackQueenPath);
         this.resources.addImage(this.constants.blackKingPath);
         this.resources.addImage(this.constants.dotPath);
+        this.resources.addImage(this.constants.selectedPath);
         const resourcesPromise = this.resources.loadResources();
         resourcesPromise
             .then((value) => {
@@ -57,11 +59,18 @@ class Main {
         });
     }
     loop() {
+        this.mouse.update();
         this.sctx.clear();
-        const dot = this.resources.getImage(this.constants.dotPath);
-        this.board.draw();
-        this.sctx.drawImage(dot, this.constants.tileWidth * 0, this.constants.tileHeight * 2, this.constants.tileWidth, this.constants.tileHeight);
+        this.handleMouse();
+        this.board.loop();
         this.globals.window.requestAnimationFrame(this.loop.bind(this));
+    }
+    handleMouse() {
+        if (this.mouse.leftButtonDown) {
+            const mouseMatrixPositionX = Math.floor((this.mouse.mouseX / 1000) * 8);
+            const mouseMatrixPositionY = Math.floor((this.mouse.mouseY / 1000) * 8);
+            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY));
+        }
     }
 }
 const main = new Main();

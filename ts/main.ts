@@ -10,6 +10,7 @@ import { State } from "./state.js";
 
 import { GlobalInstances } from "./globalInstances.js";
 
+import { Position } from "./position.js";
 import { Board } from "./board.js";
 
 
@@ -75,6 +76,7 @@ class Main {
         this.resources.addImage(this.constants.blackQueenPath);
         this.resources.addImage(this.constants.blackKingPath);
         this.resources.addImage(this.constants.dotPath);
+        this.resources.addImage(this.constants.selectedPath);
         const resourcesPromise: Promise<any> = this.resources.loadResources();
         resourcesPromise
             .then((value: any): void => {
@@ -89,15 +91,23 @@ class Main {
     }
 
     loop(): void {
+        this.mouse.update();
         this.sctx.clear();
 
-        const dot: HTMLImageElement = this.resources.getImage(this.constants.dotPath);
-
-        this.board.draw();
-        this.sctx.drawImage(dot, this.constants.tileWidth * 0, this.constants.tileHeight * 2, this.constants.tileWidth, this.constants.tileHeight);
+        this.handleMouse();
+        this.board.loop();
         
         this.globals.window.requestAnimationFrame(this.loop.bind(this));
     }
+
+    handleMouse(): void {
+        if (this.mouse.leftButtonDown) {
+            const mouseMatrixPositionX: number = Math.floor((this.mouse.mouseX / 1000) * 8);
+            const mouseMatrixPositionY: number = Math.floor((this.mouse.mouseY / 1000) * 8);
+            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY));
+        }
+    }
+
 }
 
 const main: Main = new Main();

@@ -1,9 +1,12 @@
 import { Position } from "./position.js";
+import { Move } from "./move.js";
+import { MoveType } from "./moveType.js";
 import { Piece } from "./piece.js";
+import { PieceType } from "./pieceType.js";
 import { PieceColor } from "./pieceColor.js";
 class Bishop extends Piece {
     constructor(globalInstances, board, position, color) {
-        super(globalInstances, board, position, color, true);
+        super(globalInstances, board, position, PieceType.BISHOP, color, true);
     }
     draw() {
         let image;
@@ -22,23 +25,26 @@ class Bishop extends Piece {
         let moves = [];
         let startY = this.matrixPosition.y - this.matrixPosition.x;
         for (let i = 0; i < this.constants.boardMatrixSize; i++) {
-            let move = new Position(i, startY + i);
-            if (!this.attackingOwnColor(move) &&
-                !this.goingThroughPieces(move) &&
-                this.isOnBoard(move)) {
-                moves.push(move);
+            let movePosition = new Position(i, startY + i);
+            if (!this.attackingOwnColor(movePosition) &&
+                !this.goingThroughPieces(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.MOVE, movePosition));
             }
         }
         let startX = this.matrixPosition.x + this.matrixPosition.y;
         for (let i = 0; i < this.constants.boardMatrixSize; i++) {
-            let move = new Position(startX - i, i);
-            if (!this.attackingOwnColor(move) &&
-                !this.goingThroughPieces(move) &&
-                this.isOnBoard(move)) {
-                moves.push(move);
+            let movePosition = new Position(startX - i, i);
+            if (!this.attackingOwnColor(movePosition) &&
+                !this.goingThroughPieces(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.MOVE, movePosition));
             }
         }
         return moves;
+    }
+    move(move) {
+        this.moveBase(move);
     }
 }
 export { Bishop };

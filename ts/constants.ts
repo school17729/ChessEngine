@@ -13,6 +13,7 @@ class Constants {
     blackQueenPath: string = "./res/blackQueen.png";
     blackKingPath: string = "./res/blackKing.png";
     dotPath: string = "./res/dot.png";
+    selectedPath: string = "./res/selected.png";
 
     boardMatrixSize: number = 8;
     boardMatrixWidth: number = 8;
@@ -21,6 +22,9 @@ class Constants {
     tileSize: number = 1000 / this.boardMatrixSize;
     tileWidth: number = 1000 / this.boardMatrixWidth;
     tileHeight: number = 1000 / this.boardMatrixHeight;
+
+    smoothPieceMovement: boolean = true;
+    pieceMoveDuration: number = 10; // in frames, typically there are 60 frames in a second
 
     constructor() {
 

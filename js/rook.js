@@ -1,9 +1,12 @@
 import { Position } from "./position.js";
+import { Move } from "./move.js";
+import { MoveType } from "./moveType.js";
 import { Piece } from "./piece.js";
+import { PieceType } from "./pieceType.js";
 import { PieceColor } from "./pieceColor.js";
 class Rook extends Piece {
     constructor(globalInstances, board, position, color) {
-        super(globalInstances, board, position, color, true);
+        super(globalInstances, board, position, PieceType.ROOK, color, true);
     }
     draw() {
         let image;
@@ -21,22 +24,25 @@ class Rook extends Piece {
     getLegalMoves() {
         let moves = [];
         for (let i = 0; i < this.constants.boardMatrixSize; i++) {
-            let move = new Position(this.matrixPosition.x, i);
-            if (!this.attackingOwnColor(move) &&
-                !this.goingThroughPieces(move) &&
-                this.isOnBoard(move)) {
-                moves.push(move);
+            let movePosition = new Position(this.matrixPosition.x, i);
+            if (!this.attackingOwnColor(movePosition) &&
+                !this.goingThroughPieces(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.MOVE, movePosition));
             }
         }
         for (let i = 0; i < this.constants.boardMatrixSize; i++) {
-            let move = new Position(i, this.matrixPosition.y);
-            if (!this.attackingOwnColor(move) &&
-                !this.goingThroughPieces(move) &&
-                this.isOnBoard(move)) {
-                moves.push(move);
+            let movePosition = new Position(i, this.matrixPosition.y);
+            if (!this.attackingOwnColor(movePosition) &&
+                !this.goingThroughPieces(movePosition) &&
+                this.isOnBoard(movePosition)) {
+                moves.push(new Move(MoveType.MOVE, movePosition));
             }
         }
         return moves;
+    }
+    move(move) {
+        this.moveBase(move);
     }
 }
 export { Rook };

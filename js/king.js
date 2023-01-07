@@ -1,9 +1,12 @@
 import { Position } from "./position.js";
+import { Move } from "./move.js";
+import { MoveType } from "./moveType.js";
 import { Piece } from "./piece.js";
+import { PieceType } from "./pieceType.js";
 import { PieceColor } from "./pieceColor.js";
 class King extends Piece {
     constructor(globalInstances, board, position, color) {
-        super(globalInstances, board, position, color, true);
+        super(globalInstances, board, position, PieceType.KING, color, true);
     }
     draw() {
         let image;
@@ -22,14 +25,17 @@ class King extends Piece {
         let moves = [];
         for (let i = -1; i < 2; i++) {
             for (let j = -1; j < 2; j++) {
-                const move = new Position(this.matrixPosition.x + i, this.matrixPosition.y + j);
-                if (!this.attackingOwnColor(move) &&
-                    this.isOnBoard(move)) {
-                    moves.push(move);
+                const movePosition = new Position(this.matrixPosition.x + i, this.matrixPosition.y + j);
+                if (!this.attackingOwnColor(movePosition) &&
+                    this.isOnBoard(movePosition)) {
+                    moves.push(new Move(MoveType.MOVE, movePosition));
                 }
             }
         }
         return moves;
+    }
+    move(move) {
+        this.moveBase(move);
     }
 }
 export { King };

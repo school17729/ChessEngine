@@ -8,6 +8,18 @@ class Mouse {
     rightButton: boolean;
     middleButton: boolean;
 
+    leftButtonDown: boolean;
+    rightButtonDown: boolean;
+    middleButtonDown: boolean;
+
+    leftButtonPressed: boolean;
+    rightButtonPressed: boolean;
+    middleButtonPressed: boolean;
+
+    leftButtonUp: boolean;
+    rightButtonUp: boolean;
+    middleButtonUp: boolean;
+
     mouseX: number;
     mouseY: number;
 
@@ -19,6 +31,18 @@ class Mouse {
         this.rightButton = false;
         this.middleButton = false;
 
+        this.leftButtonDown = false;
+        this.rightButtonDown = false;
+        this.middleButtonDown = false;
+
+        this.leftButtonPressed = false;
+        this.rightButtonPressed = false;
+        this.middleButtonPressed = false;
+
+        this.leftButtonUp = false;
+        this.rightButtonUp = false;
+        this.middleButtonUp = false;
+
         this.mouseX = 0;
         this.mouseY = 0;
     }
@@ -27,6 +51,40 @@ class Mouse {
         this.globals.window.addEventListener("mousedown", this.mousedown.bind(this));
         this.globals.window.addEventListener("mouseup", this.mouseup.bind(this));
         this.globals.window.addEventListener("mousemove", this.mousemove.bind(this));
+    }
+
+    update(): void {
+        this.leftButtonDown = false;
+        this.middleButtonDown = false;
+        this.rightButtonDown = false;
+        this.leftButtonUp = false;
+        this.middleButtonUp = false;
+        this.rightButtonUp = false;
+
+        if (this.leftButton && !this.leftButtonPressed) {
+            this.leftButtonDown = true;
+            this.leftButtonPressed = true;
+        }
+        if (this.rightButton && !this.rightButtonPressed) {
+            this.rightButtonDown = true;
+            this.rightButtonPressed = true;
+        }
+        if (this.middleButton && !this.middleButtonPressed) {
+            this.middleButtonDown = true;
+            this.middleButtonPressed = true;
+        }
+        if (!this.leftButton && this.leftButtonPressed) {
+            this.leftButtonUp = true;
+            this.leftButtonPressed = false;
+        }
+        if (!this.rightButton && this.rightButtonPressed) {
+            this.rightButtonUp = true;
+            this.rightButtonPressed = false;
+        }
+        if (!this.middleButton && this.middleButtonPressed) {
+            this.middleButtonUp = true;
+            this.middleButtonPressed = false;
+        }
     }
 
     mousedown(e: MouseEvent): void {
