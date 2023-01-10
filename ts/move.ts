@@ -1,14 +1,15 @@
-import { Position } from "./position.js";
-import { MoveType } from "./moveType.js";
+import { Position } from "./position";
+import { MoveType } from "./moveType";
 
 class Move {
-
     type: MoveType;
-    position: Position;
+    oldPosition: Position;
+    newPosition: Position;
 
-    constructor(type: MoveType, position: Position) {
+    constructor(type: MoveType, oldPosition: Position, newPosition: Position) {
         this.type = type;
-        this.position = position;
+        this.oldPosition = oldPosition;
+        this.newPosition = newPosition;
     }
 }
 

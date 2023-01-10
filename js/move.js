@@ -1,7 +1,8 @@
 class Move {
-    constructor(type, position) {
+    constructor(type, oldPosition, newPosition) {
         this.type = type;
-        this.position = position;
+        this.oldPosition = oldPosition;
+        this.newPosition = newPosition;
     }
 }
 export { Move };

@@ -8,8 +8,16 @@ class Position {
         this.y = y;
     }
 
+    equals(position: Position): boolean {
+        return this.x === position.x && this.y === position.y;
+    }
+
     multiply(value: number): Position {
         return new Position(this.x * value, this.y * value);
+    }
+
+    clone(): Position {
+        return new Position(this.x, this.y);
     }
 }
 

@@ -11,9 +11,11 @@ import { State } from "./state.js";
 import { GlobalInstances } from "./globalInstances.js";
 
 import { Position } from "./position.js";
+import { Game } from "./game.js";
 import { Board } from "./board.js";
-import { PieceColor } from "./pieceColor.js";
-
+import { Player } from "./player.js";
+import { PlayerColor } from "./playerColor.js";
+import { HumanPlayer } from "./humanPlayer.js";
 
 class Main {
 
@@ -30,8 +32,8 @@ class Main {
 
     globalInstances: GlobalInstances;
 
-    board: Board;
-    playerColor: PieceColor;
+    game: Game;
+    playerColor: PlayerColor;
     
 
     constructor() {
@@ -48,21 +50,25 @@ class Main {
 
         this.globalInstances = new GlobalInstances(this.globals, this.elements, this.sctx, this.keyboard, this.mouse, this.resources, this.constants, this.state);
 
-        this.board = new Board(this.globalInstances);
-        this.playerColor = PieceColor.WHITE;
+        const board: Board = new Board(this.globalInstances);
+        const players: Player[] = [] as Player[];
+        players.push(new HumanPlayer(this.globalInstances, board, PlayerColor.WHITE));
+        players.push(new HumanPlayer(this.globalInstances, board, PlayerColor.BLACK));
+        this.game = new Game(this.globalInstances, players, board);
+        this.playerColor = PlayerColor.WHITE;
     }
     
     init(): void {
         this.globals.init();
         this.elements.init();
-        this.sctx.init();this
+        this.sctx.init();
         this.keyboard.init();
         this.mouse.init();
         this.resources.init();
 
         this.constants.init();
 
-        this.board.init();
+        this.game.init();
 
         this.resources.addImage(this.constants.chessBoardPath);
         this.resources.addImage(this.constants.whitePawnPath);
@@ -97,7 +103,7 @@ class Main {
         this.sctx.clear();
 
         this.handleMouse();
-        this.board.loop();
+        this.game.loop();
         
         this.globals.window.requestAnimationFrame(this.loop.bind(this));
     }
@@ -106,7 +112,9 @@ class Main {
         if (this.mouse.leftButtonDown) {
             const mouseMatrixPositionX: number = Math.floor((this.mouse.mouseX / 1000) * 8);
             const mouseMatrixPositionY: number = Math.floor((this.mouse.mouseY / 1000) * 8);
-            this.board.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY), PieceColor.WHITE);
+            
+            const currentPlayer: HumanPlayer = this.game.getPlayerOfColor(this.game.board.turn) as HumanPlayer;
+            currentPlayer.handleTileClicked(new Position(mouseMatrixPositionX, mouseMatrixPositionY));
         }
     }
 

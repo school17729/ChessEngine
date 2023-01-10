@@ -1,5 +1,5 @@
 enum MoveType {
-    MOVE, DOUBLE_PUSH, CASTLE, EN_PASSANT, NONE
+    PASS, CAPTURE, CASTLE, PROMOTION, NONE
 }
 
 export { MoveType };
